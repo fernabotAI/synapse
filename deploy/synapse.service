@@ -1,0 +1,23 @@
+[Unit]
+Description=Synapse AI canvas
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/home/deploy/synapse/current
+Environment=NODE_ENV=production
+EnvironmentFile=-/home/deploy/synapse/shared/.env.production
+ExecStart=/home/deploy/.local/node/bin/node /home/deploy/synapse/current/node_modules/vinext/dist/cli.js start -p 3020 -H 127.0.0.1
+Restart=always
+RestartSec=4
+TimeoutStopSec=20
+KillSignal=SIGINT
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

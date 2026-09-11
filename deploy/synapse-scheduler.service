@@ -1,0 +1,16 @@
+[Unit]
+Description=Run due Synapse canvas timers
+After=network-online.target synapse.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+WorkingDirectory=/home/deploy/synapse/current
+EnvironmentFile=-/home/deploy/synapse/shared/.env.production
+ExecStart=/home/deploy/.local/node/bin/node /home/deploy/synapse/current/deploy/scheduler-tick.mjs
+TimeoutStartSec=330
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true

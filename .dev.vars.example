@@ -1,0 +1,10 @@
+# Copy this file to .dev.vars for local development.
+# Never commit the completed .dev.vars file.
+# These are application-level values; end users connect with Google OAuth.
+NEXT_PUBLIC_BASE_PATH=
+GOOGLE_GMAIL_CLIENT_ID=
+GOOGLE_GMAIL_CLIENT_SECRET=
+GOOGLE_GMAIL_REDIRECT_URI=http://localhost:3000/api/gmail/callback
+
+# Generate with: openssl rand -hex 32
+GMAIL_TOKEN_SECRET=

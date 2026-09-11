@@ -1172,6 +1172,25 @@ export default function Home() {
     window.setTimeout(() => setCopiedWebhookField((current) => current === field ? null : current), 1_800);
   }
 
+  async function disconnectWhatsAppCredentials() {
+    if (!window.confirm('Esto borra el Access Token y el App Secret guardados. El canal deja de responder hasta que cargues credenciales nuevas. \u00bfContinuar?')) return;
+    setWhatsAppCredentialBusy(true);
+    setWhatsAppCredentialError(null);
+    try {
+      const response = await fetch(appPath('/api/whatsapp/credentials'), { method: 'DELETE' });
+      if (response.status === 401) { window.location.replace('/synapse/'); return; }
+      const payload = await response.json() as { removed?: boolean; error?: string };
+      if (!response.ok) throw new Error(payload.error || 'No se pudieron borrar las credenciales.');
+      setWhatsAppConnected(false);
+      setWhatsAppAccessToken('');
+      setWhatsAppAppSecret('');
+    } catch (error) {
+      setWhatsAppCredentialError(error instanceof Error ? error.message : 'No se pudieron borrar las credenciales.');
+    } finally {
+      setWhatsAppCredentialBusy(false);
+    }
+  }
+
   async function saveWhatsAppCredentials() {
     if (whatsappAccessToken.trim().length < 20 || (!whatsappConnected && whatsappAppSecret.trim().length < 16)) {
       setWhatsAppCredentialError(whatsappConnected ? 'Completa el nuevo Access Token.' : 'Completa el Access Token y el App Secret del webhook.');
@@ -2202,6 +2221,7 @@ export default function Home() {
                     {!whatsappConnected && <label><span>App Secret del webhook</span><input type="password" autoComplete="off" value={whatsappAppSecret} onChange={(event) => { setWhatsAppAppSecret(event.target.value); setWhatsAppCredentialError(null); }} /></label>}
                     {whatsappCredentialError && <small className="whatsapp-credential-error">{whatsappCredentialError}</small>}
                     <button className="whatsapp-save-credentials" disabled={whatsappCredentialBusy || !whatsappAccessToken || (!whatsappConnected && !whatsappAppSecret)} onClick={() => void saveWhatsAppCredentials()}>{whatsappCredentialBusy ? 'Guardando…' : whatsappConnected ? 'Reemplazar Access Token' : 'Guardar en la bóveda'}</button>
+                    {whatsappConnected && <button className="whatsapp-disconnect" disabled={whatsappCredentialBusy} onClick={() => void disconnectWhatsAppCredentials()}>{whatsappCredentialBusy ? 'Borrando…' : 'Desconectar para cambiar el App Secret'}</button>}
                   </div>
                   <div className="whatsapp-flow-note"><ArrowRight size={15} /><p><b>Entrada y salida</b><span>WhatsApp → Agente responde al mismo chat. Agente → WhatsApp envía el resultado programado al destinatario configurado.</span></p></div>
                   {connections.some((edge) => edge.target === selected.id) && !/^\d{8,15}$/.test(selected.whatsappOutboundRecipient ?? '') && <div className="timer-route-warning"><Link2 size={14} /><p><b>Falta el destinatario automático</b><span>Escribe el número con código de país para completar esta salida.</span></p></div>}

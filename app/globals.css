@@ -513,6 +513,8 @@ h1 { margin: 0; font: 600 16px var(--font-geist-sans), sans-serif; letter-spacin
 .whatsapp-vault input { width: 100%; height: 32px; border: 1px solid #33443a; border-radius: 6px; background: #0f1713; color: #c7d6cc; padding: 0 9px; font: 8px var(--font-geist-mono), monospace; }
 .whatsapp-save-credentials { height: 33px; border: 1px solid #3c8b5a; border-radius: 6px; background: #1d4a30; color: #a8e9bf; font-size: 7px; font-weight: 650; }
 .whatsapp-save-credentials:disabled { opacity: .42; cursor: not-allowed; }
+.whatsapp-disconnect { height: 29px; border: 1px solid #4b4141; border-radius: 6px; background: #251f24; color: #aa898d; font-size: 7px; font-weight: 650; }
+.whatsapp-disconnect:disabled { opacity: .42; cursor: not-allowed; }
 .whatsapp-credential-error { color: #ef8c7c; font-size: 6.5px; }
 .whatsapp-flow-note { padding: 10px; border: 1px solid #304a3a; border-radius: 8px; background: #16221b; color: #70d493; display: grid; grid-template-columns: 18px 1fr; gap: 7px; }
 .whatsapp-flow-note p { margin: 0; display: grid; gap: 3px; font-size: 7px; }.whatsapp-flow-note b { color: #b6d7c2; }.whatsapp-flow-note span { color: #718579; line-height: 1.45; }
